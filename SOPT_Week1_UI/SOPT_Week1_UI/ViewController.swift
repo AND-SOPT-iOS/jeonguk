@@ -267,6 +267,8 @@ final class ViewController: UIViewController {
     
     private func transitionToNextViewController() {
         let nextViewController = DetailViewController()
+        nextViewController.delegate = self // 델리게이트 내가 해줄게
+        
         guard let title = emailTextField.text,
               let content = passwordTextField.text
         else {
@@ -278,6 +280,13 @@ final class ViewController: UIViewController {
             title: title,
             content: content
         )
+        
+        // 💁 weak self를 사용하고 있음 : 이유는?
+//        nextViewController.completionHandler = { [weak self] nickname in
+//           guard let self else { return }
+//            self.titleLabel.text = nickname
+//         }
+        
         if pushMode {
             self.navigationController?.pushViewController(
                 nextViewController,
@@ -289,6 +298,7 @@ final class ViewController: UIViewController {
                 animated: true
             )
         }
+        
     }
     
     @objc func toggleButtonTapped() {
@@ -305,6 +315,7 @@ final class ViewController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
+    
     
 }
 
@@ -382,4 +393,15 @@ extension ViewController: UITextFieldDelegate {
         loginButton.isEnabled = true    // 버튼을 활성화 시킴
     }
     //⭐️ 현제 글자가 하나하나 입력 될때마다 이 함수를 실행 시키는 것임
+}
+
+
+
+
+// 파트장 tip 구분을 위해 extension 사용
+extension ViewController: NicknameDelegate {
+  func dataBind(nickname: String) {
+    guard !nickname.isEmpty else { return }
+    self.titleLabel.text = nickname
+  }
 }
