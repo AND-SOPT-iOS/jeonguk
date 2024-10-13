@@ -267,7 +267,7 @@ final class ViewController: UIViewController {
     
     private func transitionToNextViewController() {
         let nextViewController = DetailViewController()
-        nextViewController.delegate = self // 델리게이트 내가 해줄게
+        //nextViewController.delegate = self // 델리게이트 내가 해줄게
         
         guard let title = emailTextField.text,
               let content = passwordTextField.text
@@ -276,16 +276,16 @@ final class ViewController: UIViewController {
             return
         }
         // 존재할 경우 함수를 그대로 실행
-        nextViewController.dataBind(
-            title: title,
-            content: content
-        )
+//        nextViewController.dataBind(
+//            title: title,
+//            content: content
+//        )
         
         // 💁 weak self를 사용하고 있음 : 이유는?
-//        nextViewController.completionHandler = { [weak self] nickname in
-//           guard let self else { return }
-//            self.titleLabel.text = nickname
-//         }
+        nextViewController.completionHandler = { [weak self] nickname in
+           guard let self else { return }
+            self.titleLabel.text = nickname
+         }
         
         if pushMode {
             self.navigationController?.pushViewController(

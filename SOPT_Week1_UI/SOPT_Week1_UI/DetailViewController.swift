@@ -16,9 +16,9 @@ protocol NicknameDelegate: AnyObject {
 final class DetailViewController: UIViewController {
     
     
-    weak var delegate: NicknameDelegate? // == viewController
+    //weak var delegate: NicknameDelegate? // == viewController
     
-    //var completionHandler: ((String) -> ())?
+    var completionHandler: ((String) -> ())?
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -61,9 +61,9 @@ final class DetailViewController: UIViewController {
     
     @objc func settingButtonTapped() {
         if let nickname = detailTextField.text {
-            delegate?.dataBind(nickname: nickname)
+            //delegate?.dataBind(nickname: nickname)
             
-            //completionHandler?(nickname) // 힙의 메모리가 살아있어서 아래 코드와 순서가 바뀌어도 동작...?
+            completionHandler?(nickname) // 힙의 메모리가 살아있어서 아래 코드와 순서가 바뀌어도 동작...?
             // 클로저의 생명주기와 같음
         }
         
