@@ -505,6 +505,7 @@ class ViewController: UIViewController {
 
     @objc private func reviewTapped() {
         let reviewVC = ReviewViewController() // 이동할 새로운 화면 생성
+        reviewVC.delegate = self
         reviewVC.title = "평가 및 리뷰"
         navigationController?.pushViewController(reviewVC, animated: true)
     }
@@ -639,7 +640,10 @@ class ViewController: UIViewController {
     
     @objc private func starButtonTapped(_ sender: UIButton) {
         for (index, button) in starButtons.enumerated() {
-            button.setImage(UIImage(systemName: index <= sender.tag ? "star.fill" : "star"), for: .normal)
+            
+            let configuration = UIImage.SymbolConfiguration(pointSize: 25, weight: .regular)
+        
+            button.setImage(UIImage(systemName: index <= sender.tag ? "star.fill" : "star")?.withConfiguration(configuration), for: .normal)
         }
     }
     
@@ -719,6 +723,11 @@ class ViewController: UIViewController {
             $0.height.equalTo(60) // 원하는 높이
         }
         
+        // 타이틀이 '리뷰 작성'일 때 액션 추가
+        if title == "리뷰 작성" {
+            button.addTarget(self, action: #selector(reviewTapped), for: .touchUpInside)
+        }
+        
         return button
     }
     
@@ -761,6 +770,7 @@ class ViewController: UIViewController {
     private func setupUI() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
+        
         view.backgroundColor = .black
         
         
@@ -945,6 +955,29 @@ class ViewController: UIViewController {
     
     
 }
+
+
+
+// 파트장 tip 구분을 위해 extension 사용
+extension ViewController: ReviewDelegate {
+    // 파트장 tip 구분을 위해 extension 사용
+    func dataBind(titleText: String, subtitleText dateText: String, userInput reviewText: String) {
+           // helpfulReviewView 내부의 UILabel을 찾고 텍스트를 업데이트
+           if let titleLabel = (helpfulReviewView.subviews.first as? UIStackView)?.arrangedSubviews[0] as? UILabel {
+               titleLabel.text = titleText
+           }
+           
+           if let dateLabel = (helpfulReviewView.subviews.first as? UIStackView)?.arrangedSubviews[1].subviews[2] as? UILabel {
+               dateLabel.text = dateText
+           }
+           
+           if let reviewContentLabel = (helpfulReviewView.subviews.first as? UIStackView)?.arrangedSubviews[2] as? UILabel {
+               reviewContentLabel.text = reviewText
+           }
+       }
+
+}
+
 
 
 struct ViewController_PreViews: PreviewProvider {
