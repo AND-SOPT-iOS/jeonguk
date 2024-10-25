@@ -596,15 +596,24 @@ class ViewController: UIViewController {
         var buttons: [UIButton] = []
         for index in 0..<5 {
             let button = UIButton()
-            button.setImage(UIImage(systemName: index == 0 ? "star.fill" : "star"), for: .normal)
+            
+            // 이미지 크기 설정
+            let configuration = UIImage.SymbolConfiguration(pointSize: 25, weight: .regular)
+            let image = UIImage(systemName: index == 0 ? "star.fill" : "star")?.withConfiguration(configuration)
+            
+            button.setImage(image, for: .normal)
             button.tintColor = .systemBlue // 별 색상
             button.addTarget(self, action: #selector(starButtonTapped(_:)), for: .touchUpInside)
             button.tag = index // 버튼의 태그를 통해 별의 인덱스를 구분
+            button.translatesAutoresizingMaskIntoConstraints = false
+            
+
             
             buttons.append(button)
         }
         return buttons
     }()
+
     
     @objc private func starButtonTapped(_ sender: UIButton) {
         for (index, button) in starButtons.enumerated() {
@@ -620,23 +629,25 @@ class ViewController: UIViewController {
         // 수평 스택뷰 생성
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.spacing = 16 // 두 버튼 간의 간격
+        stackView.spacing = 20 // 두 버튼 간의 간격
         stackView.alignment = .center // 중앙 정렬
-        stackView.distribution = .fillEqually // 버튼 크기 동일하게 분배
+        stackView.distribution = .equalSpacing // 버튼 크기 동일하게 분배
         
         // 리뷰 작성 버튼
-        let reviewButton = createButton(iconName: "person", title: "리뷰 작성")
+        let reviewButton = createButton(iconName: "square.and.pencil", title: "리뷰 작성")
+       
         stackView.addArrangedSubview(reviewButton)
         
         // 앱 지원 버튼
-        let supportButton = createButton(iconName: "person", title: "앱 지원")
+        let supportButton = createButton(iconName: "questionmark.circle", title: "앱 지원")
+
         stackView.addArrangedSubview(supportButton)
         
         view.addSubview(stackView)
         
         // 스택뷰의 제약 설정
         stackView.snp.makeConstraints {
-            $0.edges.equalToSuperview().inset(10) // 뷰의 여백
+            $0.edges.equalToSuperview() // 뷰의 여백
         }
         
         return view
@@ -682,8 +693,8 @@ class ViewController: UIViewController {
         
         // 버튼의 고정 너비 및 높이 설정
         button.snp.makeConstraints {
-            $0.width.equalTo(150) // 원하는 너비
-            $0.height.equalTo(50) // 원하는 높이
+            $0.width.equalTo(170) // 원하는 너비
+            $0.height.equalTo(60) // 원하는 높이
         }
         
         return button
@@ -869,7 +880,7 @@ class ViewController: UIViewController {
         starButtons.forEach { button in
             starStackView.addArrangedSubview(button)
         }
-        
+
         // starStackView를 mainVStack에 추가
         
         
@@ -882,8 +893,8 @@ class ViewController: UIViewController {
         
         mainVStack.snp.makeConstraints {
             $0.top.equalTo(helpfulReviewView.snp.bottom).offset(20)
-            $0.leading.equalTo(contentView).offset(20)  // 왼쪽 여백 20
-            $0.trailing.equalTo(contentView).offset(-20)  // 오른쪽 여백 20
+            $0.leading.equalTo(contentView).offset(16)  // 왼쪽 여백 20
+            $0.trailing.equalTo(contentView).offset(-16)  // 오른쪽 여백 20
             $0.height.equalTo(150)
             $0.bottom.equalTo(contentView.snp.bottom).offset(-20)  // 마지막 뷰의 bottom을 contentView에 연결
         }
