@@ -363,9 +363,21 @@ class ViewController: UIViewController {
             $0.top.equalToSuperview()
         }
         
+        
+        // 탭 제스처 추가
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(versionViewTapped))
+        view.addGestureRecognizer(tapGesture)
+        view.isUserInteractionEnabled = true
+        
         return view
     }()
     
+    
+    @objc private func versionViewTapped() {
+        let newVersionVC = NewVersionViewController() // 새로운 화면 인스턴스 생성
+        newVersionVC.title = "새로운 소식"
+        navigationController?.pushViewController(newVersionVC, animated: true)
+    }
     
     
     // MARK: - 베너뷰
@@ -419,10 +431,14 @@ class ViewController: UIViewController {
         titleAndArrowStackView.addArrangedSubview(titleLabel)
         titleAndArrowStackView.addArrangedSubview(arrowImageView)
         
+        // Tap Gesture Recognizer 추가
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(reviewTapped))
+        titleAndArrowStackView.addGestureRecognizer(tapGesture)
+        titleAndArrowStackView.isUserInteractionEnabled = true
+        
         let ratingAndStarsStackView = UIStackView()
         ratingAndStarsStackView.axis = .horizontal
-        
-        ratingAndStarsStackView.spacing = 140 // max 값 어떻게 주지? Spacer()같은거 없나?
+        ratingAndStarsStackView.spacing = 140 // max spacing은 직접 계산 필요
         ratingAndStarsStackView.alignment = .lastBaseline
         
         let ratingLabel = UILabel()
@@ -481,12 +497,18 @@ class ViewController: UIViewController {
         
         // 스택뷰 제약 설정
         mainVStack.snp.makeConstraints {
-            $0.edges.equalToSuperview().inset(16)
+            $0.edges.equalToSuperview()
         }
         
         return view
     }()
-    
+
+    @objc private func reviewTapped() {
+        let reviewVC = ReviewViewController() // 이동할 새로운 화면 생성
+        reviewVC.title = "평가 및 리뷰"
+        navigationController?.pushViewController(reviewVC, animated: true)
+    }
+
     
     
     
@@ -576,7 +598,7 @@ class ViewController: UIViewController {
         
         
         mainVStack.snp.makeConstraints {
-            $0.edges.equalToSuperview().inset(16)
+            $0.edges.equalToSuperview().inset(20)
         }
         
         return view
@@ -796,7 +818,7 @@ class ViewController: UIViewController {
         
         // 평가, 수상, 연령, 차트 정보 뷰 레이아웃 설정
         infoStackView.snp.makeConstraints {
-            $0.top.equalTo(appIconImageView.snp.bottom).offset(20)
+            $0.top.equalTo(appIconImageView.snp.bottom).offset(30)
             $0.leading.equalTo(contentView).inset(20) // 왼쪽 20pt 여백
             $0.trailing.equalTo(contentView).inset(-20) // 오른쪽 20pt 여백
             $0.height.equalTo(80) // 높이 설정 (필요에 따라 조정)
@@ -818,7 +840,7 @@ class ViewController: UIViewController {
             $0.top.equalTo(infoStackView.snp.bottom).offset(30) // 아래쪽으로 여백 조정
             $0.leading.equalTo(contentView).inset(20) // 왼쪽 20pt 여백
             $0.trailing.equalTo(contentView).inset(-20) // 오른쪽 20pt 여백
-            $0.height.greaterThanOrEqualTo(100) // 최소 높이 설정
+            $0.height.greaterThanOrEqualTo(80) // 최소 높이 설정
         }
         
         
@@ -844,12 +866,12 @@ class ViewController: UIViewController {
             $0.top.equalTo(bannerImageView.snp.bottom).offset(20)
             $0.leading.equalTo(contentView).inset(20)
             $0.trailing.equalTo(contentView).inset(-20)
-            $0.height.equalTo(120)
+            $0.height.equalTo(100)
             
         }
         
         helpfulReviewTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(reviewView.snp.bottom).offset(20)
+            $0.top.equalTo(reviewView.snp.bottom).offset(10)
             $0.leading.equalTo(contentView).inset(20)
             $0.trailing.equalTo(contentView).inset(-20)
             
@@ -893,8 +915,8 @@ class ViewController: UIViewController {
         
         mainVStack.snp.makeConstraints {
             $0.top.equalTo(helpfulReviewView.snp.bottom).offset(20)
-            $0.leading.equalTo(contentView).offset(16)  // 왼쪽 여백 20
-            $0.trailing.equalTo(contentView).offset(-16)  // 오른쪽 여백 20
+            $0.leading.equalTo(contentView).offset(20)  // 왼쪽 여백 20
+            $0.trailing.equalTo(contentView).offset(-20)  // 오른쪽 여백 20
             $0.height.equalTo(150)
             $0.bottom.equalTo(contentView.snp.bottom).offset(-20)  // 마지막 뷰의 bottom을 contentView에 연결
         }
