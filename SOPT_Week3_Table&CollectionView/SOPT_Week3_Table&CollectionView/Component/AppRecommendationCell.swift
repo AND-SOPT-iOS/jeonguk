@@ -40,7 +40,7 @@ final class AppRecommendationCell: UICollectionViewCell {
     private let stackView = UIStackView().then {
         $0.axis = .vertical
         $0.alignment = .leading
-        $0.spacing = 8
+        $0.spacing = 0
     }
     
     
@@ -51,18 +51,6 @@ final class AppRecommendationCell: UICollectionViewCell {
          setLayout()
      }
     
-    
-    init(title: String, appDscTitle: String, appSubDscTitle: String, image: UIImage) {
-        super.init(frame: .zero)
-        
-        self.titleLabel.text = title
-        self.appDscTitle.text = appDscTitle
-//        self.appSubDscTitle.text = appSubDscTitle
-        self.imageView.image = image
-
-        setUI()
-        setLayout()
-    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
