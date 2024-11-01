@@ -28,12 +28,12 @@ class AppTableViewCell: UITableViewCell {
     }
     
     private let titleLabel = UILabel().then {
-        $0.font = .systemFont(ofSize: 16, weight: .semibold)
+        $0.font = .systemFont(ofSize: 14, weight: .semibold)
         $0.textColor = .black
     }
     
     private let subTitleLabel = UILabel().then {
-        $0.font = .systemFont(ofSize: 14)
+        $0.font = .systemFont(ofSize: 12)
         $0.textColor = .gray
     }
     
@@ -63,6 +63,7 @@ class AppTableViewCell: UITableViewCell {
     }
     
     private func setupLayout() {
+        // 아이콘과 랭킹 라벨의 제약 조건 설정
         iconImageView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)
             make.centerY.equalToSuperview()
@@ -74,23 +75,29 @@ class AppTableViewCell: UITableViewCell {
             make.centerY.equalTo(iconImageView)
         }
         
-        titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(rankingLabel.snp.trailing) // Removed offset
-            make.top.equalToSuperview().offset(12)
-            make.trailing.equalTo(downloadButton.snp.leading).offset(-12)
+        // 타이틀과 서브타이틀을 위한 수직 스택 뷰 생성
+        let titleStackView = UIStackView(arrangedSubviews: [titleLabel, subTitleLabel])
+        titleStackView.axis = .vertical // 세로 방향으로 설정
+        titleStackView.spacing = 4 // 요소 간의 간격 설정
+        titleStackView.translatesAutoresizingMaskIntoConstraints = false // 자동 제약 조건 비활성화
+
+        // 슈퍼뷰에 스택 뷰 추가
+        addSubview(titleStackView)
+
+        // 타이틀 스택 뷰 제약 조건 설정
+        titleStackView.snp.makeConstraints { make in
+            make.leading.equalTo(rankingLabel.snp.trailing).offset(12) // 랭킹 라벨 오른쪽으로부터 여백
+            make.top.equalTo(iconImageView.snp.top) // 슈퍼뷰의 상단으로부터 여백
+          
         }
         
-        subTitleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(titleLabel)
-            make.top.equalTo(titleLabel.snp.bottom).offset(4)
-            make.trailing.equalTo(downloadButton.snp.leading).offset(-12)
-        }
-        
+        // 다운로드 버튼 제약 조건 설정
         downloadButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(16)
             make.centerY.equalToSuperview()
         }
     }
+
 
     
     func configure(app: App) {

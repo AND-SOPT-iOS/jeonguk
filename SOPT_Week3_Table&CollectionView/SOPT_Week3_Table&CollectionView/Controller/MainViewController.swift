@@ -53,8 +53,9 @@ class MainViewController: UIViewController {
         
         // 레이아웃 설정
         scrollView.snp.makeConstraints {
-            $0.edges.equalToSuperview() // 스크롤 뷰가 슈퍼뷰에 맞도록 설정
+            $0.edges.equalTo(view.safeAreaLayoutGuide) // 스크롤 뷰가 안전 영역에 맞도록 설정
         }
+
         
         
         contentView.snp.makeConstraints {

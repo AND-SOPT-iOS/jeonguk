@@ -38,19 +38,21 @@ enum DownloadState {
     
 }
 
-
 extension App {
     
-    //// 함수 호출하여 목업 데이터 생성 및 확인
+    // Mock data generation
     static let apps: [App] = generateMockApps()
 
-    
     static func generateMockApps() -> [App] {
-        // 목업 이미지 (실제 프로젝트에서는 실제 아이콘과 썸네일 이미지를 사용)
+        // Default sample images (use different ones for 토스 below)
         let sampleIconImage = UIImage(systemName: "app.fill")!
         let sampleThumbnailImages = [UIImage(systemName: "photo")!, UIImage(systemName: "photo")!]
 
-        // 한국 앱스토어 스타일의 데이터
+        // App-specific images for "토스"
+        let tossIconImage = UIImage(named: "toss") ?? sampleIconImage
+        let tossThumbnailImages = [UIImage(named: "banner") ?? sampleThumbnailImages[0], UIImage(named: "banner") ?? sampleThumbnailImages[1]]
+
+        // Korean app store style data
         let appTitles = [
             "네이버 지도", "카카오톡", "배달의민족", "토스", "무신사 스토어",
             "쿠팡", "멜론", "오늘의집", "당근마켓", "네이버 웨일",
@@ -77,13 +79,13 @@ extension App {
 
         let downloadStates: [DownloadState] = [.installed, .download, .redownload, .update]
 
-        // 목업 데이터 생성
+        // Generate mock data
         var mockApps: [App] = []
 
         for i in 0..<20 {
             let app = App(
-                iconImage: sampleIconImage,
-                ThumbnailImages: sampleThumbnailImages,
+                iconImage: appTitles[i] == "토스" ? tossIconImage : sampleIconImage,
+                ThumbnailImages: appTitles[i] == "토스" ? tossThumbnailImages : sampleThumbnailImages,
                 ranking: i + 1,
                 title: appTitles[i],
                 subTitle: subtitles[i],
@@ -96,7 +98,3 @@ extension App {
         return mockApps
     }
 }
-
-
-
-

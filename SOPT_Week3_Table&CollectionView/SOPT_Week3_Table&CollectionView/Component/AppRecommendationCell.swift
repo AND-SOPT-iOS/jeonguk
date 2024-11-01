@@ -32,7 +32,7 @@ final class AppRecommendationCell: UICollectionViewCell {
     private let imageView = UIImageView().then {
         $0.contentMode = .scaleAspectFit
         $0.clipsToBounds = true
-        $0.layer.cornerRadius = 20
+        $0.layer.cornerRadius = 8
         $0.layer.borderWidth = 0.3
         $0.layer.borderColor = UIColor.secondaryLabel.cgColor
     }
@@ -68,7 +68,7 @@ final class AppRecommendationCell: UICollectionViewCell {
     private func setLayout() {
         imageView.snp.makeConstraints {
             $0.top.leading.equalToSuperview().inset(16)
-            $0.width.height.equalTo(30)
+            $0.width.height.equalTo(40)
         }
         
         stackView.snp.makeConstraints {

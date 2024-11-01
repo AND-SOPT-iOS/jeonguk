@@ -10,15 +10,16 @@ import SnapKit
 import SwiftUI
 
 
-class AppDtailViewController: UIViewController {
+class AppDetailViewController: UIViewController {
     
     private let scrollView = UIScrollView()
     private let contentView = UIView()
+    private var app: App
     
     // 앱 아이콘
     private lazy var appIconImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "toss") // 앱 아이콘 이미지
+        imageView.image = app.iconImage // Use app icon name from the App model
         imageView.layer.cornerRadius = 18
         imageView.layer.masksToBounds = true
         return imageView
@@ -27,7 +28,7 @@ class AppDtailViewController: UIViewController {
     // 앱 이름
     private lazy var appNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "토스"
+        label.text = app.title // Use app name from the App model
         label.font = UIFont.boldSystemFont(ofSize: 24)
         label.textColor = .white
         return label
@@ -36,7 +37,7 @@ class AppDtailViewController: UIViewController {
     // 간략한 설명
     private lazy var appDescriptionLabel: UILabel = {
         let label = UILabel()
-        label.text = "금융이 쉬워진다"
+        label.text = app.subTitle // Use app description from the App model
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .gray
         return label
@@ -45,7 +46,7 @@ class AppDtailViewController: UIViewController {
     // 열기 버튼
     private lazy var downloadButton: UIButton = {
         let button = UIButton()
-        button.setTitle("열기", for: .normal)
+        button.setTitle(app.downloadState.title, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 12
@@ -75,6 +76,15 @@ class AppDtailViewController: UIViewController {
         return button
     }()
     
+    
+    init(app: App) {
+        self.app = app
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     
     // MARK: - infoView
@@ -959,7 +969,7 @@ class AppDtailViewController: UIViewController {
 
 
 // 파트장 tip 구분을 위해 extension 사용
-extension ViewController: ReviewDelegate {
+extension AppDetailViewController: ReviewDelegate {
     // 파트장 tip 구분을 위해 extension 사용
     func dataBind(titleText: String, subtitleText dateText: String, userInput reviewText: String) {
            // helpfulReviewView 내부의 UILabel을 찾고 텍스트를 업데이트
@@ -978,12 +988,5 @@ extension ViewController: ReviewDelegate {
 
 }
 
-
-
-struct ViewController_PreViews: PreviewProvider {
-    static var previews: some View {
-        ViewController().toPreview()
-    }
-}
 
 

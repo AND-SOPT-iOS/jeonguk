@@ -37,6 +37,16 @@ class AppRecommendationTableView: UIViewController {
             make.edges.equalToSuperview()
         }
     }
+    
+    private func setupBackButton() {
+          // 커스텀 백 버튼 생성
+          let backButton = UIBarButtonItem(title: "뒤로", style: .plain, target: self, action: #selector(backButtonTapped))
+          navigationItem.leftBarButtonItem = backButton
+      }
+
+      @objc private func backButtonTapped() {
+          navigationController?.popViewController(animated: true)
+      }
 }
 
 extension AppRecommendationTableView: UITableViewDelegate { }
@@ -56,7 +66,15 @@ extension AppRecommendationTableView: UITableViewDataSource {
         cell.configure(app: app)
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedApp = appList[indexPath.row]
+        let detailVC = AppDetailViewController(app: selectedApp)
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
 }
+
+
 
 #if DEBUG
 import SwiftUI
