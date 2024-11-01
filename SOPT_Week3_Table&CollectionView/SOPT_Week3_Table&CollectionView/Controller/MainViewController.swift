@@ -100,11 +100,7 @@ class MainViewController: UIViewController {
     
     private func navigateToTableView() {
         let appRecommendationTableView = AppRecommendationTableView() // 이동할 테이블 뷰 컨트롤러
-
-        // UINavigationController 인스턴스를 생성
-        let tempNavController = UINavigationController(rootViewController: appRecommendationTableView)
-        tempNavController.modalPresentationStyle = .fullScreen // 풀스크린으로 설정
-        present(tempNavController, animated: true, completion: nil)
+        navigationController?.pushViewController(appRecommendationTableView, animated: true)
     }
 
 
