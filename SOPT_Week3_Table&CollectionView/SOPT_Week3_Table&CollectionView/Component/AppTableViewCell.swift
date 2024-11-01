@@ -75,7 +75,7 @@ class AppTableViewCell: UITableViewCell {
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(rankingLabel.snp.trailing).offset(8)
+            make.leading.equalTo(rankingLabel.snp.trailing) // Removed offset
             make.top.equalToSuperview().offset(12)
             make.trailing.equalTo(downloadButton.snp.leading).offset(-12)
         }
@@ -91,6 +91,7 @@ class AppTableViewCell: UITableViewCell {
             make.centerY.equalToSuperview()
         }
     }
+
     
     func configure(app: App) {
         iconImageView.image = app.iconImage
