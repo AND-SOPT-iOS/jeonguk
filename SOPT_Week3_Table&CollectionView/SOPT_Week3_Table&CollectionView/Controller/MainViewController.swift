@@ -21,7 +21,6 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.addSubview(scrollView)
         
         // 스크롤 뷰에 콘텐츠 뷰 추가
@@ -33,9 +32,15 @@ class MainViewController: UIViewController {
         
         let headerView = AppRecommendationHeaderView()
         headerView.configure(title: "iPhone 필수 앱", description: "에디터가 직접 고른 추천 앱으로 시작하세요")
+        headerView.headerTapAction = { [weak self] in
+            self?.navigateToTableView()
+        }
         
         let headerView2 = AppRecommendationHeaderView()
         headerView2.configure(title: "지금 주목해야 할 앱", description: "새로 나온 앱과 업데이트")
+        headerView2.headerTapAction = { [weak self] in
+            self?.navigateToTableView()
+        }
         
         let appRecommendationView1 = AppRecommendationView()
         let appRecommendationView2 = AppRecommendationView()
@@ -90,6 +95,18 @@ class MainViewController: UIViewController {
             $0.bottom.equalTo(contentView).offset(-16) // 마지막 뷰의 아래 여백 설정
         }
     }
+    
+    
+    private func navigateToTableView() {
+        let appRecommendationTableView = AppRecommendationTableView() // 이동할 테이블 뷰 컨트롤러
+
+        // UINavigationController 인스턴스를 생성
+        let tempNavController = UINavigationController(rootViewController: appRecommendationTableView)
+        tempNavController.modalPresentationStyle = .fullScreen // 풀스크린으로 설정
+        present(tempNavController, animated: true, completion: nil)
+    }
+
+
 }
 
 
