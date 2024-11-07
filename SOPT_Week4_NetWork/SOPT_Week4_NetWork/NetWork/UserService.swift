@@ -143,7 +143,7 @@ final class UserService {
         
         let headers: HTTPHeaders = [
             "Content-Type": "application/json",
-            "Authorization": "Bearer \(token)"
+            "token": token
         ]
         
         AF.request(
