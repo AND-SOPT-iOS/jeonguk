@@ -8,6 +8,7 @@
 import UIKit
 import Then
 import SnapKit
+import SwiftUI
 
 // 💁 상속하지 않는다면 final 키워드 붙여주기
 
@@ -99,16 +100,16 @@ final class LoginViewController: UIViewController {
         $0.alignment = .fill
     }
     
-    private lazy var pushModeToggleButton = UIButton().then {
-        $0.setTitle("전환 모드 변경", for: .normal)
+    private lazy var signUpButton = UIButton().then {
+        $0.setTitle("회원 가입", for: .normal)
         $0.backgroundColor = .red
         $0.layer.cornerRadius = 5
         $0.layer.borderWidth = 1
         $0.setTitleColor(.white, for: .normal)
-        $0.addTarget(self, action: #selector(toggleButtonTapped), for: .touchUpInside)
+        $0.addTarget(self, action: #selector(changeModeButtonTapped), for: .touchUpInside)
     }
     
-    private var pushMode = true
+
     private let textViewHeight: CGFloat = 48
     lazy var emailInfoLabelCenterYConstraint = usernameInfoLabel.centerYAnchor.constraint(equalTo: userNameTextFieldView.centerYAnchor)
     lazy var passwordInfoLabelCenterYConstraint = passwordInfoLabel.centerYAnchor.constraint(equalTo: passwordTextFieldView.centerYAnchor)
@@ -128,7 +129,7 @@ final class LoginViewController: UIViewController {
     }
     
     private func setUI() {
-        [titleLabel, stackView, pushModeToggleButton].forEach { view.addSubview($0) }
+        [titleLabel, stackView, signUpButton].forEach { view.addSubview($0) }
     }
     
     private func setLayout() {
@@ -171,7 +172,7 @@ final class LoginViewController: UIViewController {
             $0.height.equalTo(textViewHeight * 3 + 36)
         }
         
-        pushModeToggleButton.snp.makeConstraints {
+        signUpButton.snp.makeConstraints {
             $0.top.equalTo(stackView.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.height.equalTo(44)
@@ -204,13 +205,17 @@ final class LoginViewController: UIViewController {
     }
 
     
-    @objc func toggleButtonTapped() {
-        pushMode.toggle()
-    }
+   
     
     @objc func passwordSecureModeSetting() {
         passwordTextField.isSecureTextEntry.toggle()
     }
+    
+    @objc func changeModeButtonTapped() {
+          let signUpView = SignUpView()
+          let hostingController = UIHostingController(rootView: signUpView)
+          present(hostingController, animated: true, completion: nil)
+      }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
