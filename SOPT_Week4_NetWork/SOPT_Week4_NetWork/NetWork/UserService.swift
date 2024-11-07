@@ -16,6 +16,8 @@ final class UserService {
     static let shared = UserService()
     private init() {}
     
+    
+    // MARK: 유저 등록
     /// 등록 API 콜이 일어나는 메소드
     /// 파라미터는 Request Body에 필요한 것들
     func register(
@@ -77,7 +79,7 @@ final class UserService {
     }
     // 💁 받는쪽에서 Result 타입이면 성공 실패 분기 처리해서 사용하면 됨
     
-    
+    // MARK: 유저 로그인
     func Login(
         username: String,
         password: String,
@@ -115,13 +117,11 @@ final class UserService {
             
             switch response.result {
             case .success:
-                // 성공 시 JSON 데이터에서 토큰 파싱
                 do {
                     let loginResponse = try JSONDecoder().decode(LoginResponse.self, from: data)
-                    // 토큰을 반환
                     completion(.success(loginResponse))
                 } catch {
-                    completion(.failure(.unknownError)) // 파싱 실패 시 에러 처리
+                    completion(.failure(.unknownError))
                 }
                 
             case .failure:
@@ -131,7 +131,144 @@ final class UserService {
         }
     }
     
+    // MARK: 내 취미 조회
+    func fetchUserHobby(completion: @escaping (Result<String, NetworkError>) -> Void) {
+
+        guard let token = UserDefaults.standard.string(forKey: "userToken") else {
+            completion(.failure(.unknownError))
+            return
+        }
+        
+        let url = Environment.baseURL + "/user/my-hobby"
+        
+        let headers: HTTPHeaders = [
+            "Content-Type": "application/json",
+            "Authorization": "Bearer \(token)"
+        ]
+        
+        AF.request(
+            url,
+            method: .get,
+            headers: headers
+        )
+        .validate() // 상태 코드 유효성 검사
+        .response { [weak self] response in
+            guard let statusCode = response.response?.statusCode, let data = response.data, let self else {
+                completion(.failure(.unknownError))
+                return
+            }
+            
+            switch response.result {
+            case .success:
+                do {
+                    let hobbyResponse = try JSONDecoder().decode(HobbyResponse.self, from: data)
+                    completion(.success(hobbyResponse.result.hobby))
+                } catch {
+                    completion(.failure(.unknownError))
+                }
+                
+            case .failure:
+                let error = self.handleStatusCode(statusCode, data: data)
+                completion(.failure(error))
+            }
+        }
+    }
     
+    // MARK: 다른 사람 취미 조회
+    func fetchOtherUserHobby(userID: String, completion: @escaping (Result<String, NetworkError>) -> Void) {
+        // UserDefaults에서 토큰을 가져오기
+        guard let token = UserDefaults.standard.string(forKey: "userToken") else {
+            completion(.failure(.unknownError))
+            return
+        }
+        
+        let url = "\(Environment.baseURL)/user/\(userID)/hobby"
+        
+        let headers: HTTPHeaders = [
+            "Content-Type": "application/json",
+            "token": token
+        ]
+        
+        AF.request(
+            url,
+            method: .get,
+            headers: headers
+        )
+        .validate()
+        .response { [weak self] response in
+            guard let statusCode = response.response?.statusCode, let data = response.data, let self else {
+                completion(.failure(.unknownError))
+                return
+            }
+            
+            switch response.result {
+            case .success:
+                do {
+                    let hobbyResponse = try JSONDecoder().decode(HobbyResponse.self, from: data)
+                    completion(.success(hobbyResponse.result.hobby))
+                } catch {
+                    completion(.failure(.unknownError))
+                }
+                
+            case .failure:
+                let error = self.handleStatusCode(statusCode, data: data)
+                completion(.failure(error))
+            }
+        }
+    }
+
+    // MARK: 취미 변경
+    func updateUserInformation(hobby: String, password: String, completion: @escaping (Result<Void, NetworkError>) -> Void) {
+        // UserDefaults에서 토큰을 가져오기
+        guard let token = UserDefaults.standard.string(forKey: "userToken") else {
+            completion(.failure(.unknownError))
+            return
+        }
+        
+        // URL 정의
+        let url = "\(Environment.baseURL)/user"
+        
+        // 요청 헤더에 token 추가
+        let headers: HTTPHeaders = [
+            "Content-Type": "application/json",
+            "token": token
+        ]
+        
+        // 요청 본문 데이터
+        let parameters: [String: String] = [
+            "hobby": hobby,
+            "password": password
+        ]
+        
+        // PUT 요청 보내기
+        AF.request(
+            url,
+            method: .put,
+            parameters: parameters,
+            encoding: JSONEncoding.default,
+            headers: headers
+        )
+        .validate()
+        .response { [weak self] response in
+            guard let statusCode = response.response?.statusCode, let data = response.data, let self else {
+                completion(.failure(.unknownError))
+                return
+            }
+            
+            switch response.result {
+            case .success:
+                // 성공 시 결과 반환
+                completion(.success(()))
+                
+            case .failure:
+                // 상태 코드에 따른 에러 처리
+                let error = self.handleStatusCode(statusCode, data: data)
+                completion(.failure(error))
+            }
+        }
+    }
+
+
     
     
     /// 서버의 명세서 기반으로 에러 처리를 진행해줌
