@@ -13,16 +13,22 @@ struct MainView: View {
     var body: some View {
         // selection: TabView 가 어디 페이지를 가리키는지 설정하는것
         TabView() {
-            HobbyView()
+            HomeView()
                 .tabItem {
                     Image(systemName: "house.fill")
-                    Text("Home")
+                    Text("홈")
+                }
+            
+            HobbyView()
+                .tabItem {
+                    Image(systemName: "magnifyingglass.circle")
+                    Text("취미 검색")
                 }
             
             MyPageView()
                 .tabItem {
                     Image(systemName: "person.fill")
-                    Text("MyPage")
+                    Text("마이 페이지")
                 }
         }
         .accentColor(.red)
