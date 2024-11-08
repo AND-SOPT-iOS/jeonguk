@@ -122,8 +122,14 @@ final class LoginViewController: UIViewController {
         setStyle()
         setUI()
         setLayout()
+        // 토큰이 있다면 자동으로 로그인 처리
+        checkForExistingToken()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        usernameTextField.text = ""
+        passwordTextField.text = ""
+    }
     private func setStyle() {
         self.view.backgroundColor = .black
     }
@@ -176,6 +182,18 @@ final class LoginViewController: UIViewController {
             $0.top.equalTo(stackView.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.height.equalTo(44)
+        }
+    }
+    
+    private func checkForExistingToken() {
+        // UserDefaults에서 토큰을 확인
+        if let token = UserDefaults.standard.string(forKey: "userToken"), !token.isEmpty {
+            // 토큰이 있다면 자동으로 로그인 처리를 호출
+            print("자동 로그인: 기존 토큰이 발견되었습니다.")
+            
+            // 다음 페이지로 넘어가기
+            let mcController = MainViewController() 
+            self.navigationController?.pushViewController(mcController, animated: true)
         }
     }
     
@@ -297,13 +315,3 @@ extension LoginViewController: UITextFieldDelegate {
     //⭐️ 현제 글자가 하나하나 입력 될때마다 이 함수를 실행 시키는 것임
 }
 
-
-
-
-// 파트장 tip 구분을 위해 extension 사용
-//extension LoginViewController: NicknameDelegate {
-//  func dataBind(nickname: String) {
-//    guard !nickname.isEmpty else { return }
-//    self.titleLabel.text = nickname
-//  }
-//}

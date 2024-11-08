@@ -11,7 +11,7 @@ struct MainView: View {
 
     
     var body: some View {
-        // selection: TabView 가 어디 페이지를 가리키는지 설정하는것
+ 
         TabView() {
             HomeView()
                 .tabItem {
@@ -37,5 +37,5 @@ struct MainView: View {
 
 #Preview {
     MainView()
-        .previewDevice("iPhone 14")  // Specify a device for the preview
+        .previewDevice("iPhone 14")  
 }

@@ -20,7 +20,7 @@ final class SignUpViewModel: ObservableObject {
     
     // MARK: - Methods
     func register() {
-        // Check if fields are valid before sending the request
+  
         guard !username.isEmpty, !password.isEmpty, !hobby.isEmpty else {
             errorMessage = "모든 필드를 입력해주세요."
             return
@@ -29,8 +29,10 @@ final class SignUpViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
         
-        // Call UserService's register function
-        UserService.shared.updateUserInformation(hobby: hobby, password: password) { [weak self] result in
+        UserService.shared.register(
+            username: username,
+            password: password,
+            hobby: hobby ) { [weak self] result in
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 self.isLoading = false

@@ -279,7 +279,19 @@ final class UserService {
     }
 
 
-
+    // MARK: 로그아웃
+    func logout(completion: @escaping (Result<Void, NetworkError>) -> Void) {
+        // UserDefaults에서 토큰을 삭제
+        if UserDefaults.standard.string(forKey: "userToken") != nil {
+            UserDefaults.standard.removeObject(forKey: "userToken")
+            
+            // 로그아웃 처리 성공
+            completion(.success(()))
+        } else {
+            // 토큰이 존재하지 않으면 실패 처리
+            completion(.failure(.unknownError))
+        }
+    }
     
     
     /// 서버의 명세서 기반으로 에러 처리를 진행해줌

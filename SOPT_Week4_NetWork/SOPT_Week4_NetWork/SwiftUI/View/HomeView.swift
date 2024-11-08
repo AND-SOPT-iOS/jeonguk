@@ -24,7 +24,6 @@ struct HomeView: View {
                 ForEach(0..<10) { index in
                     ScrollView(.horizontal, showsIndicators: false) {
                         LazyHStack {
-                            // 가로 스크롤 항목에 랜덤 이미지 표시
                             ForEach(0..<10) { _ in
                                 AsyncImageBasic(index: index) // 랜덤 이미지를 비동기적으로 로드
                             }
@@ -56,7 +55,7 @@ struct AsyncImageBasic: View {
                     .frame(width: 200, height: 200)
                     .cornerRadius(20)
             } placeholder: {
-                ProgressView() // 이미지 로딩 중일 때 표시할 로딩 인디케이터
+                ProgressView() 
             }
             .padding(.bottom, 5)
             

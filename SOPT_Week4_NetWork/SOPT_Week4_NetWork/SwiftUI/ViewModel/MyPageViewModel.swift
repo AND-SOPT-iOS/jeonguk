@@ -36,4 +36,15 @@ final class MyPageViewModel: ObservableObject {
             }
         }
     }
+    
+    func logout(completion: @escaping (Result<Void, NetworkError>) -> Void) {
+        UserService.shared.logout { result in
+            switch result {
+            case .success:
+                completion(.success(())) // 로그아웃 성공
+            case .failure(let error):
+                completion(.failure(error)) // 로그아웃 실패
+            }
+        }
+    }
 }
