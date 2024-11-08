@@ -7,7 +7,18 @@
 
 import UIKit
 
+
+protocol NicknameDelegate: AnyObject {
+    func dataBind(nickname: String)
+}
+
+
 final class DetailViewController: UIViewController {
+    
+    
+    //weak var delegate: NicknameDelegate? // == viewController
+    
+    var completionHandler: ((String) -> ())?
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -23,14 +34,41 @@ final class DetailViewController: UIViewController {
         return label
     }()
     
+
+    
+    private lazy var detailTextField: UITextField = {
+        let tf = UITextField()
+        tf.backgroundColor = .white
+        tf.frame.size.height = 48
+        tf.autocapitalizationType = .none
+        tf.autocorrectionType = .no
+        tf.spellCheckingType = .no
+        tf.clearsOnBeginEditing = false
+        //tf.addTarget(self, action: #selector(textFieldEditingChanged(_:)), for: .editingChanged)
+        return tf
+    }()
+    
+    
     private lazy var backButton: UIButton = {
         let button = UIButton()
         button.setTitle("이전 화면으로", for: .normal)
         button.backgroundColor = .tintColor
         button.setTitleColor(.white, for: .normal)
-        button.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(settingButtonTapped), for: .touchUpInside)
         return button
     }()
+    
+    
+    @objc func settingButtonTapped() {
+        if let nickname = detailTextField.text {
+            //delegate?.dataBind(nickname: nickname)
+            
+            completionHandler?(nickname) // 힙의 메모리가 살아있어서 아래 코드와 순서가 바뀌어도 동작...?
+            // 클로저의 생명주기와 같음
+        }
+        
+        self.navigationController?.popViewController(animated: true)
+    }
     
     // 이전 뷰에서 받을 값
     private var receivedTitle: String?
@@ -48,7 +86,7 @@ final class DetailViewController: UIViewController {
     }
     
     private func setUI() {
-        [titleLabel, contentLabel, backButton].forEach {
+        [titleLabel, detailTextField, contentLabel, backButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             self.view.addSubview($0)
         }
@@ -67,8 +105,16 @@ final class DetailViewController: UIViewController {
                     constant: 20
                 ),
                 contentLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                
+                detailTextField.topAnchor.constraint(equalTo:
+                        contentLabel.bottomAnchor,
+                        constant: 20
+                ),
+                detailTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                detailTextField.widthAnchor.constraint(equalToConstant: 300),
+                
                 backButton.topAnchor.constraint(
-                    equalTo: contentLabel.bottomAnchor,
+                    equalTo: detailTextField.bottomAnchor,
                     constant: 20
                 ),
                 backButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
