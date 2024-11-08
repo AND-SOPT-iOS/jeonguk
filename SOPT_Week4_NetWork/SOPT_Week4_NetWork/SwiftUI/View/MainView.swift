@@ -19,16 +19,10 @@ struct MainView: View {
                     Text("Home")
                 }
             
-            Text("둘러보기 화면")
-                .tabItem {
-                    Image(systemName: "globe")
-                    Text("Browse")
-                }
-            
-            Text("프로필 화면")
+            MyPageView()
                 .tabItem {
                     Image(systemName: "person.fill")
-                    Text("Profile")
+                    Text("MyPage")
                 }
         }
         .accentColor(.red)

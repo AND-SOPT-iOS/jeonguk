@@ -234,8 +234,8 @@ final class UserService {
             "token": token
         ]
         
-        // 요청 본문 데이터
-        let parameters: [String: String] = [
+        // 요청 본문 데이터 (String 대신 Any로 변경)
+        let parameters: [String: Any] = [
             "hobby": hobby,
             "password": password
         ]
@@ -250,7 +250,13 @@ final class UserService {
         )
         .validate()
         .response { [weak self] response in
-            guard let statusCode = response.response?.statusCode, let data = response.data, let self else {
+            guard let self = self else {
+                completion(.failure(.unknownError))
+                return
+            }
+            
+            // 응답 코드 확인
+            guard let statusCode = response.response?.statusCode else {
                 completion(.failure(.unknownError))
                 return
             }
@@ -262,11 +268,16 @@ final class UserService {
                 
             case .failure:
                 // 상태 코드에 따른 에러 처리
-                let error = self.handleStatusCode(statusCode, data: data)
-                completion(.failure(error))
+                if let data = response.data {
+                    let error = self.handleStatusCode(statusCode, data: data)
+                    completion(.failure(error))
+                } else {
+                    completion(.failure(.unknownError))
+                }
             }
         }
     }
+
 
 
     

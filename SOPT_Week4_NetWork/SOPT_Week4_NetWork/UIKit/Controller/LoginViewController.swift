@@ -191,10 +191,8 @@ final class LoginViewController: UIViewController {
                 UserDefaults.standard.set(token, forKey: "userToken")
                 
                 // 다음 페이지로 넘어가기
-                let mcController = MainViewController()
+                let mcController = MainViewController() // MainViewController 인스턴스 생성
                 self.navigationController?.pushViewController(mcController, animated: true)
-                // 푸시한 뷰 컨트롤러에서 SwiftUI 뷰 표시
-                mcController.showNextView() // 여기에서 showNextView 호출
                 
             case .failure(let error):
                 // 실패 시 에러 메시지 표시
@@ -203,6 +201,7 @@ final class LoginViewController: UIViewController {
             }
         }
     }
+
 
     
    

@@ -9,18 +9,22 @@ import UIKit
 import SwiftUI
 
 class MainViewController: UIViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.navigationItem.hidesBackButton = true
+        showNextView()
     }
-
+    
     func showNextView() {
-        let mainView = MainView()
+        let mainView = MainView() // SwiftUI View
         let hostingController = UIHostingController(rootView: mainView) // Wrap it in a UIHostingController
         
-        // Present the hosting controller
-        self.present(hostingController, animated: true, completion: nil)
+        // SwiftUI 뷰를 화면에 표시
+        self.addChild(hostingController)
+        hostingController.view.frame = self.view.bounds
+        self.view.addSubview(hostingController.view)
+        hostingController.didMove(toParent: self)
     }
 }
 

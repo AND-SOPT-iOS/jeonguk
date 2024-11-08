@@ -8,7 +8,7 @@
 import Foundation
 
 final class SignUpViewModel: ObservableObject {
-    // Published properties for data binding
+    // MARK: - State Properties
     @Published var username: String = ""
     @Published var password: String = ""
     @Published var hobby: String = ""
@@ -17,7 +17,8 @@ final class SignUpViewModel: ObservableObject {
     @Published var isRegistered: Bool = false
     
     
-    // Register function that calls UserService to perform the registration
+    
+    // MARK: - Methods
     func register() {
         // Check if fields are valid before sending the request
         guard !username.isEmpty, !password.isEmpty, !hobby.isEmpty else {
@@ -29,7 +30,7 @@ final class SignUpViewModel: ObservableObject {
         errorMessage = nil
         
         // Call UserService's register function
-        UserService.shared.register(username: username, password: password, hobby: hobby) { [weak self] result in
+        UserService.shared.updateUserInformation(hobby: hobby, password: password) { [weak self] result in
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 self.isLoading = false

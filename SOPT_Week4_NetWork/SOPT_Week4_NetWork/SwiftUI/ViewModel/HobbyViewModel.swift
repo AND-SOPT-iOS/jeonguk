@@ -9,12 +9,14 @@ import Foundation
 import Combine
 
 final class HobbyViewModel: ObservableObject {
+    
+    // MARK: - State Properties
     @Published var myHobby: String = ""
     @Published var otherUserHobby: String = ""
     @Published var errorMessage: String? = nil
     @Published var isLoading: Bool = false
     
-    
+    // MARK: - Methods
     // 내 취미 조회
     func fetchMyHobby() {
         isLoading = true
