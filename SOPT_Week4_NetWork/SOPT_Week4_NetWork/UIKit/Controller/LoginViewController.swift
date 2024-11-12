@@ -127,9 +127,11 @@ final class LoginViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated) // 부모 클래스의 기본 동작 호출
         usernameTextField.text = ""
         passwordTextField.text = ""
     }
+
     private func setStyle() {
         self.view.backgroundColor = .black
     }
