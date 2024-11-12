@@ -10,16 +10,14 @@ import SwiftUI
 struct MyPageView: View {
     @StateObject var viewModel = MyPageViewModel()
     @State private var successMessage: String?
-    @SwiftUI.Environment(\.dismiss) var dismiss // 화면을 닫기 위한 dismiss 프로퍼티
+    @SwiftUI.Environment(\.dismiss) var dismiss
     
     var body: some View {
         VStack {
-            // 취미 입력 필드
             TextField("취미 입력", text: $viewModel.hobby)
                 .padding()
                 .textFieldStyle(RoundedBorderTextFieldStyle())
             
-            // 비밀번호 입력 필드
             SecureField("비밀번호 입력", text: $viewModel.password)
                 .padding()
                 .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -28,7 +26,6 @@ struct MyPageView: View {
                 ProgressView()
             } else {
                 Button(action: {
-                    // 취미 수정 요청
                     viewModel.updateUserInformation { result in
                         switch result {
                         case .success:
@@ -50,20 +47,15 @@ struct MyPageView: View {
                         .cornerRadius(8)
                 }
                 .padding(.horizontal)
-                .disabled(viewModel.isLoading) // 로딩 중에는 버튼 비활성화
+                .disabled(viewModel.isLoading)
             }
             
-            
-            
-            
-            // 실패 메시지 표시
+            // 실패 성공 유무 메시지
             if let errorMessage = viewModel.errorMessage {
                 Text(errorMessage)
                     .foregroundColor(.red)
                     .padding()
             }
-            
-            // 성공 메시지 표시
             if let successMessage = successMessage {
                 Text(successMessage)
                     .foregroundColor(.green)
@@ -90,8 +82,6 @@ struct MyPageView: View {
                     .cornerRadius(8)
             }
             .padding(.horizontal)
-            
-            
         }
         .padding()
     }
@@ -100,5 +90,3 @@ struct MyPageView: View {
 #Preview {
     MyPageView()
 }
-
-

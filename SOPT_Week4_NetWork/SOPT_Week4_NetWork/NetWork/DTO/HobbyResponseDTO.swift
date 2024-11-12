@@ -16,4 +16,3 @@ struct HobbyResponse: Decodable {
 struct HobbyResult: Decodable {
     let hobby: String
 }
-

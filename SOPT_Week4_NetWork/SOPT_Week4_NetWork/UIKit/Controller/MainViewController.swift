@@ -16,11 +16,10 @@ class MainViewController: UIViewController {
         showNextView()
     }
     
+    // SwiftUI 뷰를 화면에 표시
     func showNextView() {
         let mainView = MainView() // SwiftUI View
-        let hostingController = UIHostingController(rootView: mainView) // Wrap it in a UIHostingController
-        
-        // SwiftUI 뷰를 화면에 표시
+        let hostingController = UIHostingController(rootView: mainView)
         self.addChild(hostingController)
         hostingController.view.frame = self.view.bounds
         self.view.addSubview(hostingController.view)

@@ -15,10 +15,9 @@ final class SignUpViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
     @Published var isRegistered: Bool = false
-    
-    
-    
+
     // MARK: - Methods
+    
     func register() {
   
         guard !username.isEmpty, !password.isEmpty, !hobby.isEmpty else {

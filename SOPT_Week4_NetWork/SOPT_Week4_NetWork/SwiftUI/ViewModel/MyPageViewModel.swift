@@ -7,11 +7,10 @@
 
 import SwiftUI
 
-
-// ViewModel 정의
 final class MyPageViewModel: ObservableObject {
     
     // MARK: - State Properties
+    
     @Published var hobby: String = ""
     @Published var password: String = ""
     @Published var errorMessage: String? = nil
@@ -19,6 +18,7 @@ final class MyPageViewModel: ObservableObject {
     
     
     // MARK: - Methods
+    
     func updateUserInformation(completion: @escaping (Result<Void, NetworkError>) -> Void) {
         isLoading = true
         errorMessage = nil
@@ -41,9 +41,9 @@ final class MyPageViewModel: ObservableObject {
         UserService.shared.logout { result in
             switch result {
             case .success:
-                completion(.success(())) // 로그아웃 성공
+                completion(.success(()))
             case .failure(let error):
-                completion(.failure(error)) // 로그아웃 실패
+                completion(.failure(error))
             }
         }
     }

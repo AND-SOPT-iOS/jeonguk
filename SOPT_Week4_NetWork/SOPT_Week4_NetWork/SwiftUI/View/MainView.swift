@@ -8,23 +8,18 @@
 import SwiftUI
 
 struct MainView: View {
-
-    
     var body: some View {
- 
         TabView() {
             HomeView()
                 .tabItem {
                     Image(systemName: "house.fill")
                     Text("홈")
                 }
-            
             HobbyView()
                 .tabItem {
                     Image(systemName: "magnifyingglass.circle")
                     Text("취미 검색")
                 }
-            
             MyPageView()
                 .tabItem {
                     Image(systemName: "person.fill")
