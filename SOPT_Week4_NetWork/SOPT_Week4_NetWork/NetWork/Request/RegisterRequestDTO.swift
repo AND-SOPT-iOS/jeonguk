@@ -7,19 +7,10 @@
 
 import Foundation
 
-struct RegisterRequest: Codable {
+struct RegisterRequestDTO: Codable {
   let username: String
   let password: String
   let hobby: String
-}
-
-struct LoginRequest: Codable {
-  let username: String
-  let password: String
-}
-
-struct LoginResponse: Codable {
-    let result: Token
 }
 
 struct Token: Codable {

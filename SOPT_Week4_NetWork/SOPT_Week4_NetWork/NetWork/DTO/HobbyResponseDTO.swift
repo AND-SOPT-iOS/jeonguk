@@ -8,7 +8,7 @@
 import Foundation
 
 // 성공 응답에서 hobby 값을 담을 구조체
-struct HobbyResponse: Decodable {
+struct HobbyResponseDTO: Decodable {
     let result: HobbyResult
 }
 

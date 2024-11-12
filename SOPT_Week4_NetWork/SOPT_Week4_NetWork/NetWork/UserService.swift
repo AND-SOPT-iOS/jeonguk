@@ -22,7 +22,7 @@ final class UserService {
     ) {
         
         let url = Environment.baseURL + "/user"
-        let parameters = RegisterRequest(
+        let parameters = RegisterRequestDTO(
             username: username,
             password: password,
             hobby: hobby
@@ -59,11 +59,11 @@ final class UserService {
     func Login(
         username: String,
         password: String,
-        completion: @escaping (Result<LoginResponse, NetworkError>) -> Void
+        completion: @escaping (Result<LoginResponseDTO, NetworkError>) -> Void
     ) {
         let url = Environment.baseURL + "/login"
         
-        let parameters = LoginRequest(
+        let parameters = LoginRequestDTO(
             username: username,
             password: password
         )
@@ -93,7 +93,7 @@ final class UserService {
             switch response.result {
             case .success:
                 do {
-                    let loginResponse = try JSONDecoder().decode(LoginResponse.self, from: data)
+                    let loginResponse = try JSONDecoder().decode(LoginResponseDTO.self, from: data)
                     completion(.success(loginResponse))
                 } catch {
                     completion(.failure(.unknownError))
@@ -136,7 +136,7 @@ final class UserService {
             switch response.result {
             case .success:
                 do {
-                    let hobbyResponse = try JSONDecoder().decode(HobbyResponse.self, from: data)
+                    let hobbyResponse = try JSONDecoder().decode(HobbyResponseDTO.self, from: data)
                     completion(.success(hobbyResponse.result.hobby))
                 } catch {
                     completion(.failure(.unknownError))
@@ -179,7 +179,7 @@ final class UserService {
             switch response.result {
             case .success:
                 do {
-                    let hobbyResponse = try JSONDecoder().decode(HobbyResponse.self, from: data)
+                    let hobbyResponse = try JSONDecoder().decode(HobbyResponseDTO.self, from: data)
                     completion(.success(hobbyResponse.result.hobby))
                 } catch {
                     completion(.failure(.unknownError))
