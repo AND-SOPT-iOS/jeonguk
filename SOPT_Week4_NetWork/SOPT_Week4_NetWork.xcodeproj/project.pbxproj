@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F7E3D592CE32693009633CB /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 2F7E3D582CE32693009633CB /* SwiftKeychainWrapper */; };
 		64C283EB2CD5F179004BDBFB /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 64C283EA2CD5F179004BDBFB /* Alamofire */; };
 		64C283EF2CD5F27A004BDBFB /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 64C283EE2CD5F27A004BDBFB /* Config.xcconfig */; };
 		64C283FF2CD5FDC1004BDBFB /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 64C283FE2CD5FDC1004BDBFB /* SnapKit */; };
@@ -46,6 +47,7 @@
 			files = (
 				64C283EB2CD5F179004BDBFB /* Alamofire in Frameworks */,
 				64C283FF2CD5FDC1004BDBFB /* SnapKit in Frameworks */,
+				2F7E3D592CE32693009633CB /* SwiftKeychainWrapper in Frameworks */,
 				64C284042CD5FDD4004BDBFB /* Then in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -93,6 +95,7 @@
 				64C283EA2CD5F179004BDBFB /* Alamofire */,
 				64C283FE2CD5FDC1004BDBFB /* SnapKit */,
 				64C284032CD5FDD4004BDBFB /* Then */,
+				2F7E3D582CE32693009633CB /* SwiftKeychainWrapper */,
 			);
 			productName = SOPT_Week4_NetWork;
 			productReference = 64C283D12CD5F0F1004BDBFB /* SOPT_Week4_NetWork.app */;
@@ -126,6 +129,7 @@
 				64C283E92CD5F179004BDBFB /* XCRemoteSwiftPackageReference "Alamofire" */,
 				64C283FD2CD5FDC1004BDBFB /* XCRemoteSwiftPackageReference "SnapKit" */,
 				64C284022CD5FDD4004BDBFB /* XCRemoteSwiftPackageReference "Then" */,
+				2F7E3D572CE32693009633CB /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 64C283D22CD5F0F1004BDBFB /* Products */;
@@ -372,6 +376,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		2F7E3D572CE32693009633CB /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jrendel/SwiftKeychainWrapper";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.1;
+			};
+		};
 		64C283E92CD5F179004BDBFB /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -399,6 +411,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		2F7E3D582CE32693009633CB /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2F7E3D572CE32693009633CB /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
 		64C283EA2CD5F179004BDBFB /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 64C283E92CD5F179004BDBFB /* XCRemoteSwiftPackageReference "Alamofire" */;

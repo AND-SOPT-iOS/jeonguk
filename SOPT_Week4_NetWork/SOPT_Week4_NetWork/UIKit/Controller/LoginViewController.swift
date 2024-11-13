@@ -15,11 +15,21 @@ final class LoginViewController: UIViewController {
     
     // MARK: - Constants
     
+    private let apiService: APIService
+    private let keyChainManager: KeyChainManager
     private let textViewHeight: CGFloat = 48
+    
     private lazy var emailInfoLabelCenterYConstraint = usernameInfoLabel.centerYAnchor
         .constraint(equalTo: usernameTextFieldView.centerYAnchor)
     private lazy var passwordInfoLabelCenterYConstraint = passwordInfoLabel.centerYAnchor
         .constraint(equalTo: passwordTextFieldView.centerYAnchor)
+    
+    private var id: String {
+        return usernameTextField.text ?? ""
+    }
+    private var password: String {
+        return passwordTextField.text ?? ""
+    }
     
     // MARK: - UI Components
     
@@ -41,7 +51,43 @@ final class LoginViewController: UIViewController {
         $0.alignment = .fill
     }
     
+    
+    private let loginAlert: UIAlertController = {
+        let alert = UIAlertController(
+            title: "로그인 실패",
+            message: "아이디와 비밀번호를 확인해주세요",
+            preferredStyle: .alert
+        )
+        let action = UIAlertAction(title: "확인", style: .default)
+        alert.addAction(action)
+
+        return alert
+    }()
+
+    private let errorAlert: UIAlertController = {
+        let alert = UIAlertController(
+            title: "오류",
+            message: "알 수 없는 오류가 발생했습니다.",
+            preferredStyle: .alert
+        )
+        let action = UIAlertAction(title: "확인", style: .default)
+        alert.addAction(action)
+
+        return alert
+    }()
+    
     // MARK: - Lifecycle
+    
+    init(apiService: APIService, keyChainManager: KeyChainManager) {
+          self.keyChainManager = keyChainManager
+          self.apiService = apiService
+          super.init(nibName: nil, bundle: nil)
+      }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -139,7 +185,7 @@ final class LoginViewController: UIViewController {
             $0.setTitle("로그인", for: .normal)
             $0.titleLabel?.font = .boldSystemFont(ofSize: 16)
             $0.isEnabled = false
-            $0.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
+            $0.addTarget(self, action: #selector(loginButtonDidTap), for: .touchUpInside)
         }
         
         signUpButton.do {
@@ -148,7 +194,7 @@ final class LoginViewController: UIViewController {
             $0.layer.cornerRadius = 5
             $0.layer.borderWidth = 1
             $0.setTitleColor(.white, for: .normal)
-            $0.addTarget(self, action: #selector(changeModeButtonTapped), for: .touchUpInside)
+            $0.addTarget(self, action: #selector(signUpButtonDidTap), for: .touchUpInside)
         }
         
         
@@ -206,40 +252,41 @@ final class LoginViewController: UIViewController {
     }
     
     // MARK: - Methods
-    
+
     private func checkForExistingToken() {
-        if let token = UserDefaults.standard.string(forKey: "userToken"), !token.isEmpty {
-            print("자동 로그인: 기존 토큰이 발견되었습니다.")
-            let mcController = MainViewController()
-            self.navigationController?.pushViewController(mcController, animated: true)
+        if let token = keyChainManager.searchValue(), !token.isEmpty {
+            print("자동 로그인: 키체인에서 기존 토큰이 발견되었습니다.")
+            let mvController = MainViewController(apiService: apiService)
+            self.navigationController?.pushViewController(mvController, animated: true)
         }
     }
-    
-    @objc func nextButtonTapped() {
-        UserService.shared.Login(username: usernameTextField.text ?? "", password: passwordTextField.text ?? "") { result in
-            switch result {
-            case .success(let loginResponse):
-                // 로그인 성공 시 토큰을 받아서 처리
-                let token = loginResponse.result.token // LoginResponse에서 토큰 추출
-                print("Received token: \(token)")
-                
-                UserDefaults.standard.set(token, forKey: "userToken")
-                
-                let mcController = MainViewController()
-                self.navigationController?.pushViewController(mcController, animated: true)
-                
-            case .failure(let error):
-                print("에러 표시: \(error)")
+
+    @objc func loginButtonDidTap() {
+        apiService.login(username: usernameTextField.text ?? "", password: passwordTextField.text ?? "") { [weak self] result in
+                guard let self else { return }
+                switch result {
+                case .success:
+                    UserDefaults.standard.set(id, forKey: "id")
+                    UserDefaults.standard.set(password, forKey: "password")
+                    let mvController = MainViewController(apiService: apiService)
+                    self.navigationController?.pushViewController(mvController, animated: true)
+                case .failure(let failure):
+                    switch failure {
+                    case .passwordInvalid, .loginInvalid:
+                        present(loginAlert, animated: true)
+                    default:
+                        present(errorAlert, animated: true)
+                    }
+                }
             }
-        }
     }
     
     @objc func passwordSecureModeSetting() {
         passwordTextField.isSecureTextEntry.toggle()
     }
     
-    @objc func changeModeButtonTapped() {
-        let signUpView = SignUpView()
+    @objc func signUpButtonDidTap() {
+        let signUpView = SignUpView(apiService: apiService) // apiService를 전달
         let hostingController = UIHostingController(rootView: signUpView)
         present(hostingController, animated: true, completion: nil)
     }

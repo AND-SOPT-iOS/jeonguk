@@ -18,8 +18,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         self.window = UIWindow(windowScene: windowScene)
-        let navigationController = UINavigationController(rootViewController: LoginViewController())
+        
+        let keyChainManager = DefaultKeyChainManager()
+        let apiService = APIService(keyChainManager: keyChainManager)
+        let rootViewController = LoginViewController(
+            apiService: apiService,
+            keyChainManager: keyChainManager
+        )
+        let navigationController = UINavigationController(
+            rootViewController: rootViewController
+        )
+        navigationController.isNavigationBarHidden = true
         self.window?.rootViewController = navigationController
         self.window?.makeKeyAndVisible()
     }
 }
+
+

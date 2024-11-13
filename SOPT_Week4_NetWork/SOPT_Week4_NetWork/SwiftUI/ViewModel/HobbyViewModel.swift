@@ -16,12 +16,20 @@ final class HobbyViewModel: ObservableObject {
     @Published var errorMessage: String? = nil
     @Published var isLoading: Bool = false
     
+    private let apiService: APIService
+    
+    // MARK: - Initializer
+    
+    init(apiService: APIService) {
+        self.apiService = apiService
+    }
+    
     // MARK: - Methods
     
     func fetchMyHobby() {
         isLoading = true
         errorMessage = nil
-        UserService.shared.fetchUserHobby { [weak self] result in
+        apiService.fetchMyHobby{ [weak self] result in
             DispatchQueue.main.async {
                 self?.isLoading = false
                 switch result {
@@ -34,19 +42,19 @@ final class HobbyViewModel: ObservableObject {
         }
     }
     
-    func fetchOtherUserHobby(userID: String) {
-        isLoading = true
-        errorMessage = nil
-        UserService.shared.fetchOtherUserHobby(userID: userID) { [weak self] result in
-            DispatchQueue.main.async {
-                self?.isLoading = false
-                switch result {
-                case .success(let hobby):
-                    self?.otherUserHobby = hobby
-                case .failure(let error):
-                    self?.errorMessage = "다른 유저의 취미를 가져오는데 실패했습니다: \(error.localizedDescription)"
-                }
-            }
-        }
-    }
+//    func fetchOtherUserHobby(userID: String) {
+//        isLoading = true
+//        errorMessage = nil
+//        apiService.fetchOtherUserHobby(userID: userID) { [weak self] result in
+//            DispatchQueue.main.async {
+//                self?.isLoading = false
+//                switch result {
+//                case .success(let hobby):
+//                    self?.otherUserHobby = hobby
+//                case .failure(let error):
+//                    self?.errorMessage = "다른 유저의 취미를 가져오는데 실패했습니다: \(error.localizedDescription)"
+//                }
+//            }
+//        }
+//    }
 }

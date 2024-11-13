@@ -8,19 +8,29 @@
 import SwiftUI
 
 struct MainView: View {
+    
+    private let apiService: APIService
+
+    // 생성자에서 apiService를 주입받도록 설정
+    init(apiService: APIService) {
+        self.apiService = apiService
+    }
+
     var body: some View {
-        TabView() {
+        TabView {
             HomeView()
                 .tabItem {
                     Image(systemName: "house.fill")
                     Text("홈")
                 }
-            HobbyView()
+            
+            HobbyView(apiService: apiService)
                 .tabItem {
                     Image(systemName: "magnifyingglass.circle")
                     Text("취미 검색")
                 }
-            MyPageView()
+            
+            MyPageView(apiService: apiService)
                 .tabItem {
                     Image(systemName: "person.fill")
                     Text("마이 페이지")
@@ -31,6 +41,8 @@ struct MainView: View {
 }
 
 #Preview {
-    MainView()
-        .previewDevice("iPhone 14")  
+    MainView(apiService: APIService(keyChainManager: DefaultKeyChainManager()))
+        .previewDevice("iPhone 14")
 }
+
+

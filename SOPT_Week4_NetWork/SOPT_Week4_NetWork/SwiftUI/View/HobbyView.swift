@@ -8,8 +8,13 @@
 import SwiftUI
 
 struct HobbyView: View {
-    @StateObject private var viewModel = HobbyViewModel()
+    @StateObject private var viewModel: HobbyViewModel
     @State private var otherUserID: String = ""
+    
+    // apiService를 초기화 시점에 직접 주입받도록 설정
+    init(apiService: APIService) {
+        _viewModel = StateObject(wrappedValue: HobbyViewModel(apiService: apiService))
+    }
     
     var body: some View {
         VStack(spacing: 20) {
@@ -34,21 +39,21 @@ struct HobbyView: View {
                     .padding()
             }
             
-            TextField("다른 유저 ID", text: $otherUserID)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding(.horizontal)
-            
-            Button(action: {
-                viewModel.fetchOtherUserHobby(userID: otherUserID)
-            }) {
-                Text("다른 유저의 취미 조회")
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color.green)
-                    .cornerRadius(8)
-            }
-            .padding(.horizontal)
+            //            TextField("다른 유저 ID", text: $otherUserID)
+            //                .textFieldStyle(RoundedBorderTextFieldStyle())
+            //                .padding(.horizontal)
+            //
+            //            Button(action: {
+            //                viewModel.fetchOtherUserHobby(userID: otherUserID)
+            //            }) {
+            //                Text("다른 유저의 취미 조회")
+            //                    .foregroundColor(.white)
+            //                    .padding()
+            //                    .frame(maxWidth: .infinity)
+            //                    .background(Color.green)
+            //                    .cornerRadius(8)
+            //            }
+            //            .padding(.horizontal)
             
             if !viewModel.otherUserHobby.isEmpty {
                 Text("다른 유저의 취미: \(viewModel.otherUserHobby)")
@@ -70,5 +75,6 @@ struct HobbyView: View {
 }
 
 #Preview {
-    HobbyView()
+    SignUpView(apiService: APIService(keyChainManager: MockKeyChainManager()))
 }
+

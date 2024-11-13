@@ -8,6 +8,10 @@
 import Foundation
 
 final class SignUpViewModel: ObservableObject {
+    
+    // MARK: - Dependencies
+    private let apiService: APIService
+    
     // MARK: - State Properties
     @Published var username: String = ""
     @Published var password: String = ""
@@ -16,10 +20,13 @@ final class SignUpViewModel: ObservableObject {
     @Published var errorMessage: String? = nil
     @Published var isRegistered: Bool = false
 
-    // MARK: - Methods
+    // MARK: - Initializer
+    init(apiService: APIService) {
+        self.apiService = apiService
+    }
     
+    // MARK: - Methods
     func register() {
-  
         guard !username.isEmpty, !password.isEmpty, !hobby.isEmpty else {
             errorMessage = "모든 필드를 입력해주세요."
             return
@@ -28,10 +35,7 @@ final class SignUpViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
         
-        UserService.shared.register(
-            username: username,
-            password: password,
-            hobby: hobby ) { [weak self] result in
+        apiService.register(username: username, password: password, hobby: hobby) { [weak self] result in
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 self.isLoading = false

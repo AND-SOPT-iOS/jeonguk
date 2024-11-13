@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct SignUpView: View {
-    @StateObject private var viewModel = SignUpViewModel()
+    @StateObject private var viewModel: SignUpViewModel
+    
+    init(apiService: APIService) {
+        _viewModel = StateObject(wrappedValue: SignUpViewModel(apiService: apiService))
+    }
     
     var body: some View {
         VStack(spacing: 16) {
@@ -55,5 +59,6 @@ struct SignUpView: View {
 }
 
 #Preview {
-    SignUpView()
+    SignUpView(apiService: APIService(keyChainManager: MockKeyChainManager()))
 }
+

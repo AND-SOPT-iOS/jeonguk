@@ -5,7 +5,7 @@
 //  Created by 정정욱 on 11/8/24.
 //
 
-import SwiftUI
+import Foundation
 
 final class MyPageViewModel: ObservableObject {
     
@@ -15,7 +15,12 @@ final class MyPageViewModel: ObservableObject {
     @Published var password: String = ""
     @Published var errorMessage: String? = nil
     @Published var isLoading: Bool = false
+    private let apiService: APIService
     
+    // MARK: - Initializer
+    init(apiService: APIService) {
+        self.apiService = apiService
+    }
     
     // MARK: - Methods
     
@@ -23,7 +28,7 @@ final class MyPageViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
         
-        UserService.shared.updateUserInformation(hobby: hobby, password: password) { [weak self] result in
+        apiService.putMyHobby(hobby: hobby, password: password){ [weak self] result in
             DispatchQueue.main.async {
                 self?.isLoading = false
                 switch result {
@@ -31,20 +36,22 @@ final class MyPageViewModel: ObservableObject {
                     completion(.success(()))
                 case .failure(let error):
                     self?.errorMessage = "정보 업데이트에 실패했습니다: \(error.localizedDescription)"
-                    completion(.failure(error))
                 }
             }
         }
     }
     
-    func logout(completion: @escaping (Result<Void, NetworkError>) -> Void) {
-        UserService.shared.logout { result in
-            switch result {
-            case .success:
-                completion(.success(()))
-            case .failure(let error):
-                completion(.failure(error))
+    func logout(completion: @escaping (Bool) -> Void) {
+        apiService.logout { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    completion(true)
+                case .failure:
+                    completion(false)
+                }
             }
         }
     }
+
 }

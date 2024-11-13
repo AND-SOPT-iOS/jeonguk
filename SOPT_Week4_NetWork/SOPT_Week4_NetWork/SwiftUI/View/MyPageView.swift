@@ -8,9 +8,14 @@
 import SwiftUI
 
 struct MyPageView: View {
-    @StateObject var viewModel = MyPageViewModel()
+    @StateObject private var viewModel: MyPageViewModel
     @State private var successMessage: String?
     @SwiftUI.Environment(\.dismiss) var dismiss
+    
+    // apiService를 초기화 시점에 직접 주입받도록 설정
+    init(apiService: APIService) {
+        _viewModel = StateObject(wrappedValue: MyPageViewModel(apiService: apiService))
+    }
     
     var body: some View {
         VStack {
@@ -63,17 +68,18 @@ struct MyPageView: View {
             }
             
             Button(action: {
-                viewModel.logout { result in
-                    switch result {
-                    case .success:
-                        // 로그아웃 후 네비게이션으로 뒤로 가기
+                viewModel.logout { success in
+                    if success {
+                        // 로그아웃 성공 시 메시지를 표시하고 뷰를 닫음
                         successMessage = "로그아웃 성공"
-                        dismiss() // 현재 뷰 닫기
-                    case .failure(let error):
-                        print("로그아웃 실패: \(error.localizedDescription)")
+                        dismiss()
+                    } else {
+                        // 로그아웃 실패 시 오류 메시지 설정
+                        successMessage = "로그아웃 실패"
+                        print("로그아웃 실패")
                     }
                 }
-            }) {
+            })  {
                 Text("로그아웃")
                     .foregroundColor(.white)
                     .padding()
@@ -88,5 +94,6 @@ struct MyPageView: View {
 }
 
 #Preview {
-    MyPageView()
+    MyPageView(apiService: APIService(keyChainManager: MockKeyChainManager()))
 }
+
