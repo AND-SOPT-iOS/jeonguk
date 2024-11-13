@@ -263,23 +263,22 @@ final class LoginViewController: UIViewController {
 
     @objc func loginButtonDidTap() {
         apiService.login(username: usernameTextField.text ?? "", password: passwordTextField.text ?? "") { [weak self] result in
-                guard let self else { return }
-                switch result {
-                case .success:
-                    UserDefaults.standard.set(id, forKey: "id")
-                    UserDefaults.standard.set(password, forKey: "password")
-                    let mvController = MainViewController(apiService: apiService)
-                    self.navigationController?.pushViewController(mvController, animated: true)
-                case .failure(let failure):
-                    switch failure {
-                    case .passwordInvalid, .loginInvalid:
-                        present(loginAlert, animated: true)
-                    default:
-                        present(errorAlert, animated: true)
-                    }
+            guard let self else { return }
+            switch result {
+            case .success:
+                let mvController = MainViewController(apiService: apiService)
+                self.navigationController?.pushViewController(mvController, animated: true)
+            case .failure(let failure):
+                switch failure {
+                case .passwordInvalid, .loginInvalid:
+                    present(loginAlert, animated: true)
+                default:
+                    present(errorAlert, animated: true)
                 }
             }
+        }
     }
+
     
     @objc func passwordSecureModeSetting() {
         passwordTextField.isSecureTextEntry.toggle()
